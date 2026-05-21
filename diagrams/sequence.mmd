@@ -1,0 +1,46 @@
+sequenceDiagram
+    actor P as Paciente
+    actor R as Recepcionista
+    actor E as Enfermeiro
+    actor M as Médico
+    participant S as Sistema
+    participant DB as BD PostgreSQL
+    participant N as Notificação
+
+    P->>R: Chega à UPA
+    R->>S: Registrar entrada (RF04)
+    S->>DB: Verificar cadastro (RF02)
+    DB-->>S: Status cadastro
+    alt Sem cadastro
+        R->>S: Cadastrar paciente (RF01)
+        S->>DB: Salvar dados
+    end
+
+    R->>E: Encaminhar para triagem
+    E->>S: Registrar sinais vitais (RF05-RF06)
+    S->>S: Classificar risco (RF07)
+    S->>DB: Salvar triagem
+
+    E->>M: Encaminhar consulta (RF08)
+    M->>S: Acessar histórico (RF09-RF10)
+    S->>DB: Buscar prontuário
+    DB-->>M: Dados do paciente
+    M->>S: Registrar consulta (RF11)
+    M->>S: Solicitar exame (RF12)
+
+    S->>S: Buscar horários (RF15-RF17)
+    S-->>P: Exibir horários (RF18)
+    P->>S: Confirmar agendamento (RF19)
+    S->>DB: Atualizar agenda (RF20)
+    S->>S: Gerar protocolo (RF21)
+
+    S->>N: Disparar notificação (RF22)
+    N-->>P: SMS/WhatsApp/E-mail (RF23-RF24)
+
+    Note over S,N: Antes da data: lembrete (RF25)
+
+    P->>S: Comparece ao exame
+    S->>DB: Registrar comparecimento (RF26)
+    S->>DB: Salvar resultado (RF28)
+    S->>DB: Atualizar prontuário (RF29-RF32)
+    S->>R: Encerrar atendimento (RF33-RF35)
