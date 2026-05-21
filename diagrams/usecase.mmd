@@ -1,0 +1,60 @@
+flowchart LR
+    P((Paciente))
+    R((Recepcionista))
+    E((Enfermeiro))
+    M((Médico))
+    L((Laboratório))
+    N((Sistema de<br/>Notificação))
+
+    subgraph SYS [Sistema UPA 24h]
+        direction TB
+        UC1([Cadastrar Paciente])
+        UC2([Atualizar Dados])
+        UC3([Registrar Atendimento])
+        UC4([Realizar Triagem])
+        UC5([Classificar Risco])
+        UC6([Acessar Histórico])
+        UC7([Registrar Consulta])
+        UC8([Solicitar Exames])
+        UC9([Buscar Horários])
+        UC10([Confirmar Agendamento])
+        UC11([Gerar Protocolo])
+        UC12([Enviar Notificação])
+        UC13([Enviar Lembrete])
+        UC14([Confirmar Comparecimento])
+        UC15([Registrar Resultado])
+        UC16([Atualizar Prontuário])
+        UC17([Consultar Prontuário])
+        UC18([Emitir Relatórios])
+        UC19([Encerrar Atendimento])
+    end
+
+    P --- UC1
+    P --- UC2
+    P --- UC10
+    R --- UC1
+    R --- UC3
+    R --- UC18
+    R --- UC19
+    E --- UC4
+    E --- UC5
+    M --- UC6
+    M --- UC7
+    M --- UC8
+    M --- UC17
+    UC8 --> UC9
+    UC10 --> UC11
+    UC10 --> UC12
+    UC12 -.-> N
+    UC13 -.-> N
+    L --- UC14
+    L --- UC15
+    UC7 --> UC16
+    UC15 --> UC16
+
+    classDef ucNode fill:#e8f5f0,stroke:#3ddc97,stroke-width:1.5px,color:#1a2028
+    classDef actorNode fill:#fff,stroke:#5eb3ff,stroke-width:2px,color:#1a2028
+    classDef sysBox fill:#f5f7fa,stroke:#8b949e,stroke-width:1.5px,stroke-dasharray: 5 5
+    class UC1,UC2,UC3,UC4,UC5,UC6,UC7,UC8,UC9,UC10,UC11,UC12,UC13,UC14,UC15,UC16,UC17,UC18,UC19 ucNode
+    class P,R,E,M,L,N actorNode
+    class SYS sysBox
