@@ -1,0 +1,117 @@
+classDiagram
+    direction TB
+
+    class Paciente {
+        -id: UUID
+        -nome: String
+        -cpf: String
+        -dataNascimento: Date
+        -telefone: String
+        -endereco: String
+        -infoSaude: String
+        +cadastrar()
+        +atualizar()
+        +verificarCadastro() : Boolean
+    }
+
+    class Triagem {
+        -id: UUID
+        -temperatura: Float
+        -pressaoArterial: String
+        -freqCardiaca: Int
+        -sintomas: String
+        -nivelUrgencia: Enum
+        +registrar()
+        +classificarRisco() : Enum
+        +encaminhar()
+    }
+
+    class Consulta {
+        -id: UUID
+        -data: DateTime
+        -diagnostico: String
+        -tratamento: String
+        -prescricoes: String
+        -observacoes: String
+        +registrar()
+        +acessarHistorico()
+    }
+
+    class Agendamento {
+        -id: UUID
+        -tipoExame: String
+        -especialidade: String
+        -prioridade: Enum
+        -dataSugerida: DateTime
+        -protocolo: String
+        +buscarHorarios() : List
+        +confirmar()
+        +gerarProtocolo() : String
+    }
+
+    class Exame {
+        -id: UUID
+        -tipo: String
+        -dataRealizacao: DateTime
+        -resultado: String
+        +confirmarComparecimento()
+        +registrarResultado()
+    }
+
+    class Notificacao {
+        -id: UUID
+        -canal: Enum
+        -dataHora: DateTime
+        -local: String
+        -tipoAtendimento: String
+        +enviar()
+        +agendarLembrete()
+    }
+
+    class ProntuarioEletronico {
+        -id: UUID
+        -historico: List
+        -medicamentos: String
+        -observacoes: String
+        +atualizar()
+        +consultar()
+    }
+
+    class Profissional {
+        -id: UUID
+        -nome: String
+        -login: String
+        -senha: String
+        -nivelAcesso: Enum
+        +autenticar() : Boolean
+    }
+
+    class Medico {
+        -crm: String
+        -especialidade: String
+        +solicitarExame()
+    }
+
+    class Enfermeiro {
+        -coren: String
+    }
+
+    class Recepcionista {
+        -setor: String
+    }
+
+    Profissional <|-- Medico
+    Profissional <|-- Enfermeiro
+    Profissional <|-- Recepcionista
+    Paciente "1" --> "0..*" Triagem : realiza
+    Triagem "1" --> "1" Consulta : gera
+    Consulta "1" --> "0..*" Agendamento : solicita
+    Agendamento "1" --> "1" Exame : referencia
+    Agendamento "1" --> "1..*" Notificacao : dispara
+    Paciente "1" --> "1" ProntuarioEletronico : possui
+    Consulta "0..*" --> "1" ProntuarioEletronico : registrada em
+    Exame "0..*" --> "1" ProntuarioEletronico : registrado em
+    Medico "1" --> "0..*" Consulta : realiza
+    Enfermeiro "1" --> "0..*" Triagem : realiza
+
+    class Profissional abstract
