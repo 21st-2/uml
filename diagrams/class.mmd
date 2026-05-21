@@ -78,6 +78,7 @@ classDiagram
     }
 
     class Profissional {
+        <<abstract>>
         -id: UUID
         -nome: String
         -login: String
@@ -114,4 +115,4 @@ classDiagram
     Medico "1" --> "0..*" Consulta : realiza
     Enfermeiro "1" --> "0..*" Triagem : realiza
 
-    class Profissional abstract
+    
